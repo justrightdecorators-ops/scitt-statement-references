@@ -26,6 +26,14 @@ Schemes:
   ReceivedBytes, alg -16       SHA-256 of the candidate's bytes exactly as received (defined by
                                draft-dobson-scitt-statement-references, not by Gruszka).
                                Equality shows: the same octets.
+  CEGStatementId, alg -16      the statement id of draft-moore-scitt-ciris-ceg-04, Section 5.2:
+                               SHA-256 of the deterministic encoding of the three-element array
+                               ["CEG-statement-id/2", protected, payload], protected and payload
+                               as byte strings. The label is inside the hashed bytes, so the
+                               value cannot be mistaken for a digest under another rule. It reads
+                               no external_aad (that draft fixes it empty) and no signature.
+                               Equality shows: the same signed content, as ToBeSigned does; the
+                               two select the same statements and give different values.
   any other scheme             UNSUPPORTED.
 
 A candidate is read strictly (RFC 8949): one data item and nothing after it, tag 18 or untagged,
@@ -42,6 +50,7 @@ import base64, binascii, hashlib, json, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sid_reader import Bad, Map, Tag, read_one, to_be_signed, HASH_LEN  # strict RFC 8949 reader
+from sid_reader import _cbor_head
 
 VERSION = "2.0.0"
 HASHES = {-16: hashlib.sha256, -44: hashlib.sha512}
@@ -49,7 +58,16 @@ SCHEMES = {
     ("ToBeSigned", -16): "the same signed content",
     ("ToBeSigned", -44): "the same signed content",
     ("ReceivedBytes", -16): "the same octets as received",
+    ("CEGStatementId", -16): "the same signed content",
 }
+CEG_LABEL = b"CEG-statement-id/2"
+
+def ceg_statement_id_input(protected, payload):
+    """["CEG-statement-id/2", protected, payload], definite lengths, shortest form (ceg-04 Section 5.2)."""
+    out = _cbor_head(4, 3) + _cbor_head(3, len(CEG_LABEL)) + CEG_LABEL
+    for b in (protected, payload):
+        out += _cbor_head(2, len(b)) + b
+    return out
 
 # ---------------------------------------------------------------- reading
 
@@ -129,6 +147,8 @@ def identifier(raw, scheme, alg, payload=None, aad=b""):
         return None
     _, prot, pl, _ = rc
     pl = pl if pl is not None else payload
+    if scheme == "CEGStatementId":
+        return None if pl is None else HASHES[alg](ceg_statement_id_input(prot, pl)).digest()
     if pl is None or aad is None:
         return None
     return HASHES[alg](to_be_signed(prot, aad, pl)).digest()
@@ -225,6 +245,8 @@ KNOWN = {
     # ietf/scitt-companion-demo). Not embedded; pass --b3 to check it.
     "b3_tbs": "7bc1a5408ac6d6e9c8f3339c5c0e720998aa23be858da0dfda317f2e82d21689",
     "b3_bytes": "ec5d05875122c5043d18db3225737c0e977f30d80d3d9f4c13c1768aa7c60dab",
+    # the statement id that Appendix B.3 of that draft states, over a 505-byte input
+    "b3_ceg": "7d868e399743467fd3f01b0c92ab3e10a442ad1141f68a54261dd558c111bad4",
 }
 
 def selftest(b3_path=None):
@@ -247,11 +269,27 @@ def selftest(b3_path=None):
         ("tag 17: not a statement", check(b"\xd1" + STATEMENT_01[1:], ref01)["is_scitt"] is False),
         ("external_aad named but not supplied: INDETERMINATE",
          check(STATEMENT_01, ref01, aad=None)["match"] == "INDETERMINATE"),
+        ("CEGStatementId is computable for any COSE_Sign1 with its payload",
+         len(identifier(STATEMENT_01, "CEGStatementId", -16)) == 32),
     ]
     if b3_path:
         b3 = open(b3_path, "rb").read()
         cases.append(("known answer: ceg-04 B.3, ToBeSigned", tbs(b3) == KNOWN["b3_tbs"]))
         cases.append(("known answer: ceg-04 B.3, ReceivedBytes", rb(b3) == KNOWN["b3_bytes"]))
+        ceg = identifier(b3, "CEGStatementId", -16)
+        rc = read_candidate(b3)
+        cases.append(("known answer: ceg-04 B.3, CEGStatementId", ceg.hex() == KNOWN["b3_ceg"]))
+        cases.append(("ceg-04 B.3: the statement id input is 505 bytes",
+                      len(ceg_statement_id_input(rc[1], rc[2])) == 505))
+        ref = {"alg": -16, "scheme": "CEGStatementId", "digest": KNOWN["b3_ceg"]}
+        cases.append(("a CEG statement id matches under its own scheme",
+                      check(b3, ref).get("match") == "MATCH"))
+        cases.append(("the same value named as ToBeSigned does not match",
+                      check(b3, dict(ref, scheme="ToBeSigned")).get("match") == "NO_MATCH"))
+        cases.append(("CEGStatementId does not read external_aad",
+                      check(b3, ref, aad=None).get("match") == "MATCH"))
+        cases.append(("an unprotected header entry does not change the CEG statement id",
+                      identifier(b3[:249] + bytes.fromhex("a119018a814100") + b3[250:], "CEGStatementId", -16) == ceg))
     bad = 0
     for name, ok in cases:
         print("%-4s %s" % ("ok" if ok else "FAIL", name)); bad += not ok

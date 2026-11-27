@@ -32,8 +32,10 @@ A reference is CBOR `[alg, scheme, digest]`, or JSON
 `{"alg": -16, "scheme": "ToBeSigned", "digest": "<hex>", "iss": "...", "sub": "..."}`.
 
 Schemes: `ToBeSigned` (alg -16 or -44), as in draft-gruszka;
-`ReceivedBytes` (alg -16), defined by this draft. Anything else is
-UNSUPPORTED. By default the checker uses the fixed-empty external_aad
+`ReceivedBytes` (alg -16), defined by this draft; `CEGStatementId` (alg -16),
+the statement id of draft-moore-scitt-ciris-ceg-04, Section 5.2: SHA-256 of
+the deterministic encoding of `["CEG-statement-id/2", protected, payload]`.
+Anything else is UNSUPPORTED. By default the checker uses the fixed-empty external_aad
 variant; `--aad` supplies one and `--aad-named` marks one as named but not
 supplied (INDETERMINATE).
 
@@ -47,6 +49,11 @@ checked.
 |---|---|---|
 | draft-gruszka Appendix A.1, statement 01 | `c3f5f137...faa9dbc` | `9c725361...3d054c6` |
 | draft-moore-scitt-ciris-ceg-04 Appendix B.3 | `7bc1a540...2d21689` | `ec5d0587...7c60dab` |
+
+The same B.3 statement under `CEGStatementId` gives `7d868e39...c111bad4`, the
+value that appendix states. It selects the same statements as `ToBeSigned`
+and gives a different value, so a reference has to name which of the two it
+was made under.
 
 On the published Section 6 cases of draft-gruszka the checker agrees on
 ref_usable, match and is_scitt in all 58 checks it runs, and
