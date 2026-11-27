@@ -1,0 +1,128 @@
+{
+ "title": "Composition at registration: test vectors (C2, C3)",
+ "draft": "draft-dobson-scitt-statement-references-00",
+ "reference_form": "protected header text label \"inputs\": [[iss text, sub text, digest bstr(32)], ...], digest = SHA-256 over Sig_structure ['Signature1', protected, h'', payload]",
+ "rule": "Refuse a Signed Statement unless every reference resolves to a statement already registered in this service with the same iss and sub. On refusal, register nothing.",
+ "test_keys": "Ed25519, seed = SHA-256('composition test key ' + label), labels 'publisher' and 'agent'. TEST KEYS ONLY: never use for real statements.",
+ "statements": {
+  "A": {
+   "base64": "0oRYW6IBJw+jAXgeaHR0cHM6Ly9wdWJsaXNoZXIudGVzdC5leGFtcGxlAmhmaWd1cmUtMQihAaMBASAGIVggRhm9ak+vHI6xOY/yUrwoLBia/P1rRpUMJ23ZweMTzk+gUnsiZmlndXJlIjoiNC4yMSUifVhAmlC0Cm75rbD5Ip8FPPcIMHphsPxt5G/KKdfzisFhlS8bPtStXJ1Gnapl8792OrR1jqkFMM0/glAce1eatWC4BQ==",
+   "sha256": "81e2f732842f818ad39f569fe4c44a99b7ce2c03c45a8ae817ddcee77c10afe4",
+   "length": 181
+  },
+  "A2": {
+   "base64": "0oRYW6IBJw+jAXgeaHR0cHM6Ly9wdWJsaXNoZXIudGVzdC5leGFtcGxlAmhmaWd1cmUtMgihAaMBASAGIVggRhm9ak+vHI6xOY/yUrwoLBia/P1rRpUMJ23ZweMTzk+gUnsiZmlndXJlIjoiNy4wMyUifVhAWYMJ3YYbtDGyGl616NGfPS9NTwFb+QiSgA1hz41ZkHcXJNFvb8oinIseA7Bo428Amsfhw0ZUng/Y07G5LI8SAg==",
+   "sha256": "5c987574cf98ff9e518a7c5f05c6b2c46c179432bd89c7b1070c5ab840265640",
+   "length": 181
+  },
+  "B": {
+   "base64": "0oRYraMBJw+jAXgaaHR0cHM6Ly9hZ2VudC50ZXN0LmV4YW1wbGUCamRlY2lzaW9uLTEIoQGjAQEgBiFYINi0e3Ry8jSjXosCpYfQR1Y2k+Kn3wLBZDgZ6I2HehdkZmlucHV0c4GDeB5odHRwczovL3B1Ymxpc2hlci50ZXN0LmV4YW1wbGVoZmlndXJlLTFYIPPW14YwZDlMp+5rej6XI4A8xKWFiMm2EEE1R2ARRAvboFR7ImRlY2lzaW9uIjoiQUxMT1cifVhA9VlmQ5409V5susEJYamjmCjbyVyWdgL0OApMetLHkOtRVAjO78VFTKl2Cx/jurgqlewP7P75OKiOg8kBnfBjAA==",
+   "sha256": "0253fb1bc9c2459969064f572c14d4a5049500a01f8a238c8fb3d332d1066d10",
+   "length": 265
+  },
+  "C": {
+   "base64": "0oRY+aMBJw+jAXgaaHR0cHM6Ly9hZ2VudC50ZXN0LmV4YW1wbGUCamRlY2lzaW9uLTIIoQGjAQEgBiFYINi0e3Ry8jSjXosCpYfQR1Y2k+Kn3wLBZDgZ6I2HehdkZmlucHV0c4KDeB5odHRwczovL3B1Ymxpc2hlci50ZXN0LmV4YW1wbGVoZmlndXJlLTFYIPPW14YwZDlMp+5rej6XI4A8xKWFiMm2EEE1R2ARRAvbg3geaHR0cHM6Ly9wdWJsaXNoZXIudGVzdC5leGFtcGxlaGZpZ3VyZS0yWCBmx100kiPdzNGIRpg78MtNsoVL9B1CuK9IbQ9B/CMs86BUeyJkZWNpc2lvbiI6IkFMTE9XIn1YQEATQsFkg7f8eo8Zf5DeqC2dZiI31SO8dTDXlR3EbdwaEKsH8JP07aTT7JLj2n+JTtr/MUawk01cZRQxxzi2MAY=",
+   "sha256": "32a001d69dbbbfad6c1083955c72c0924633fd807704e4a2cab71fc09a2f6651",
+   "length": 341
+  },
+  "D": {
+   "base64": "0oRYsaMBJw+jAXgaaHR0cHM6Ly9hZ2VudC50ZXN0LmV4YW1wbGUCamRlY2lzaW9uLTMIoQGjAQEgBiFYINi0e3Ry8jSjXosCpYfQR1Y2k+Kn3wLBZDgZ6I2HehdkZmlucHV0c4GDeB5odHRwczovL3B1Ymxpc2hlci50ZXN0LmV4YW1wbGVsZmlndXJlLVdST05HWCDz1teGMGQ5TKfua3o+lyOAPMSlhYjJthBBNUdgEUQL26BUeyJkZWNpc2lvbiI6IkFMTE9XIn1YQLd2nZx0nTPxmohQ6aWMNd7yrGl+nPBQEgHJp47G8WCLlJ1kCOan0w45r1AnZUzYUyMzHoDlbiwe4OCo2o9Figw=",
+   "sha256": "eeee22130cd83cc51124355cafe918f03aa256a620fe0f88301c582e13fe860b",
+   "length": 269
+  },
+  "E": {
+   "base64": "0oRYrKMBJw+jAXgaaHR0cHM6Ly9hZ2VudC50ZXN0LmV4YW1wbGUCamRlY2lzaW9uLTQIoQGjAQEgBiFYINi0e3Ry8jSjXosCpYfQR1Y2k+Kn3wLBZDgZ6I2HehdkZmlucHV0c4GDeB5odHRwczovL3B1Ymxpc2hlci50ZXN0LmV4YW1wbGVoZmlndXJlLTFYH/PW14YwZDlMp+5rej6XI4A8xKWFiMm2EEE1R2ARRAugVHsiZGVjaXNpb24iOiJBTExPVyJ9WEByueoXNmWa1m1vt2TX95N4NI2XxN7WmDL9rtMPvjxrJ6MV1R3GDMijkW/4HITtbMRLvKuTR5gxf0vkdPVp0SEK",
+   "sha256": "26f6746f04fbc4ab00359f60f83a25a623dfeddd2154b21e966a967cc83a0a77",
+   "length": 264
+  },
+  "F": {
+   "base64": "0oRYYaMBJw+jAXgaaHR0cHM6Ly9hZ2VudC50ZXN0LmV4YW1wbGUCamRlY2lzaW9uLTUIoQGjAQEgBiFYINi0e3Ry8jSjXosCpYfQR1Y2k+Kn3wLBZDgZ6I2HehdkZmlucHV0c4CgVHsiZGVjaXNpb24iOiJBTExPVyJ9WEC9FnZG/rQ8Y+qD5RQRIgeBwzyeTACkBsSyU1jUJ2gd9FOCS5afjUS3PRWot7c8F72lu19kV3dZWjhY9bOBfvYN",
+   "sha256": "f6e85b98863d7cf231265a18971d8dc3147a09ec0c87739d4eb37994469c2607",
+   "length": 189
+  },
+  "G": {
+   "base64": "0oRYraMBJw+jAXgaaHR0cHM6Ly9hZ2VudC50ZXN0LmV4YW1wbGUCamRlY2lzaW9uLTYIoQGjAQEgBiFYINi0e3Ry8jSjXosCpYfQR1Y2k+Kn3wLBZDgZ6I2HehdkZmlucHV0c4GDeB5odHRwczovL3B1Ymxpc2hlci50ZXN0LmV4YW1wbGVoZmlndXJlLTFYIIHi9zKEL4GK059Wn+TESpm3ziwDxFqK6Bfdzud8EK/koFR7ImRlY2lzaW9uIjoiQUxMT1cifVhAlOjvnlfTzbWoe0BDtFGnGcVq012pbEzbZxn1YOBSS2RN9R/ARLExLlF4afyOGMnoek1rj0A3CJD/JCyuiyciDA==",
+   "sha256": "568ec15af205842e4f89a495899e03da240ee63e874b19d43f59ed4209ece326",
+   "length": 265
+  }
+ },
+ "tbs_digests": {
+  "A": "f3d6d7863064394ca7ee6b7a3e9723803cc4a58588c9b6104135476011440bdb",
+  "A2": "66c75d349223ddccd18846983bf0cb4db2854bf41d42b8af486d0f41fc232cf3",
+  "B": "31522d5d3cc0dd8ca22f932fd338b03fc413cc350ff9f1b17dc588a42e868d8f",
+  "C": "7d046ad1f4a08960c9879e213c774a7319a877ab320bef0e8ce6d56a65a0b319"
+ },
+ "steps": [
+  {
+   "step": 1,
+   "register": "B",
+   "expect": "refuse",
+   "problem_title": "Missing Reference",
+   "why": "B cites A, which is not registered yet. Nothing is registered (C3)."
+  },
+  {
+   "step": 2,
+   "register": "A",
+   "expect": "accept",
+   "problem_title": null,
+   "why": "A cites nothing."
+  },
+  {
+   "step": 3,
+   "register": "B",
+   "expect": "accept",
+   "problem_title": null,
+   "why": "A is now registered with the same iss and sub, so B's reference resolves."
+  },
+  {
+   "step": 4,
+   "register": "C",
+   "expect": "refuse",
+   "problem_title": "Missing Reference",
+   "why": "C cites A and A2; A2 is not registered. One unresolved reference refuses the whole statement."
+  },
+  {
+   "step": 5,
+   "register": "A2",
+   "expect": "accept",
+   "problem_title": null,
+   "why": "A2 cites nothing."
+  },
+  {
+   "step": 6,
+   "register": "C",
+   "expect": "accept",
+   "problem_title": null,
+   "why": "Both references now resolve."
+  },
+  {
+   "step": 7,
+   "register": "D",
+   "expect": "refuse",
+   "problem_title": "Missing Reference",
+   "why": "Right digest, wrong sub: a reference resolves only with matching iss and sub."
+  },
+  {
+   "step": 8,
+   "register": "E",
+   "expect": "refuse",
+   "problem_title": "Rejected",
+   "why": "Digest of 31 bytes: the reference is not well-formed."
+  },
+  {
+   "step": 9,
+   "register": "F",
+   "expect": "refuse",
+   "problem_title": "Rejected",
+   "why": "An empty inputs array is not well-formed."
+  },
+  {
+   "step": 10,
+   "register": "G",
+   "expect": "refuse",
+   "problem_title": "Missing Reference",
+   "why": "Digest over A's whole bytes, not its Sig_structure: under the ToBeSigned scheme it does not resolve."
+  }
+ ],
+ "start_state": "an empty log, or one holding none of these statements"
+}
