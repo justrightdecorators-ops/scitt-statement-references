@@ -32,8 +32,10 @@ Schemes:
                                as byte strings. The label is inside the hashed bytes, so the
                                value cannot be mistaken for a digest under another rule. It reads
                                no external_aad (that draft fixes it empty) and no signature.
-                               Equality shows: the same signed content, as ToBeSigned does; the
-                               two select the same statements and give different values.
+                               Equality shows: the same protected header and payload. It selects
+                               the same statements as ToBeSigned when external_aad is empty, and
+                               gives a different value; two statements signed over different
+                               external_aad share a CEGStatementId and differ under ToBeSigned.
   any other scheme             UNSUPPORTED.
 
 A candidate is read strictly (RFC 8949): one data item and nothing after it, tag 18 or untagged,
@@ -58,7 +60,7 @@ SCHEMES = {
     ("ToBeSigned", -16): "the same signed content",
     ("ToBeSigned", -44): "the same signed content",
     ("ReceivedBytes", -16): "the same octets as received",
-    ("CEGStatementId", -16): "the same signed content",
+    ("CEGStatementId", -16): "the same protected header and payload",
 }
 CEG_LABEL = b"CEG-statement-id/2"
 
@@ -271,6 +273,9 @@ def selftest(b3_path=None):
          check(STATEMENT_01, ref01, aad=None)["match"] == "INDETERMINATE"),
         ("CEGStatementId is computable for any COSE_Sign1 with its payload",
          len(identifier(STATEMENT_01, "CEGStatementId", -16)) == 32),
+        ("a different external_aad changes ToBeSigned and not CEGStatementId",
+         identifier(STATEMENT_01, "ToBeSigned", -16, aad=b"x") != identifier(STATEMENT_01, "ToBeSigned", -16)
+         and identifier(STATEMENT_01, "CEGStatementId", -16, aad=b"x") == identifier(STATEMENT_01, "CEGStatementId", -16)),
     ]
     if b3_path:
         b3 = open(b3_path, "rb").read()

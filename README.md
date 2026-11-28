@@ -51,9 +51,10 @@ checked.
 | draft-moore-scitt-ciris-ceg-04 Appendix B.3 | `7bc1a540...2d21689` | `ec5d0587...7c60dab` |
 
 The same B.3 statement under `CEGStatementId` gives `7d868e39...c111bad4`, the
-value that appendix states. It selects the same statements as `ToBeSigned`
-and gives a different value, so a reference has to name which of the two it
-was made under.
+value that appendix states. Equality under it shows the same protected header and
+payload. It selects the same statements as `ToBeSigned` when external_aad is
+empty, and gives a different value, so a reference has to name which of the
+two it was made under.
 
 On the published Section 6 cases of draft-gruszka the checker agrees on
 ref_usable, match and is_scitt in all 58 checks it runs, and
